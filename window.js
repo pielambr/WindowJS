@@ -2,7 +2,6 @@
  * Created by Pieterjan Lambrecht on 12/06/15.
  */
 
-
 function WindowJS (options) {
     var that = this;
     if(options) {
@@ -49,6 +48,9 @@ function WindowJS (options) {
             this._body.innerHTML = options.content;
             this._window.appendChild(this._body);
         }
+        if("parent" in options) {
+            this.parent = options.parent;
+        }
     } else {
         console.error("No options provided, skipping creation of window");
     }
@@ -59,7 +61,11 @@ WindowJS.prototype.close = function() {
 }
 
 WindowJS.prototype.show = function() {
-    this.body.appendChild(this._window);
+    if(this.parent) {
+        this.parent.appendChild(this._window);
+    } else {
+        this.body.appendChild(this._window);
+    }
 }
 
 WindowJS.prototype.attachDrag = function() {
