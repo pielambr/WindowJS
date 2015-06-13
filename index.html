@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <script src="window.js"></script>
+    <style>
+        .windowjs-window {
+            border: 1px solid darkgray;
+        }
+        .windowjs-title {
+            font-weight: bold;
+            font-size: large;
+            padding-left: 3px;
+            float: left;
+        }
+        .windowjs-close {
+            vertical-align: middle;
+            padding-right: 3px;
+            float: right;
+        }
+        .windowjs-body {
+            background: lightgrey;
+            clear: both;
+            padding: 3px;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var w = new WindowJS({
+                closeable: true,
+                title: "test",
+                draggable: true,
+                content: "<span>Test content</span>"
+            });
+            w.show();
+        };
+    </script>
+</head>
+<body>
+
+</body>
+</html>
