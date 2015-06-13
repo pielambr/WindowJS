@@ -1,6 +1,8 @@
 /**
  * Created by Pieterjan Lambrecht on 12/06/15.
  */
+
+
 function WindowJS (options) {
     var that = this;
     if(options) {
@@ -18,7 +20,6 @@ function WindowJS (options) {
         if("closeable" in options) {
             this._close = document.createElement("div");
             this._close.className = "windowjs-close";
-            this._close.style.cursor = "pointer";
             this.closeable = options.closeable;
             if("close_button" in options) {
                 this._close.innerHTML = options.close_button;
@@ -63,7 +64,6 @@ WindowJS.prototype.show = function() {
 
 WindowJS.prototype.attachDrag = function() {
     var that = this;
-    this._title.style.cursor = "all-scroll";
     this._window.ondragstart = function() {
         return false;
     }

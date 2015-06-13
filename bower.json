@@ -1,0 +1,11 @@
+{
+    "name": "WindowJS",
+    "description": "Draggable and closeable windows",
+    "version": "0.0.1",
+    "main": "window.js",
+    "ignore": [
+        "*.html",
+        "*.md",
+        "LICENSE"
+    ]
+}
