@@ -1,11 +1,21 @@
 {
-    "name": "WindowJS",
-    "description": "Draggable and closeable windows",
-    "version": "0.0.1",
-    "main": "window.js",
-    "ignore": [
-        "*.html",
-        "*.md",
-        "LICENSE"
-    ]
+  "name": "WindowJS",
+  "description": "Draggable and closeable windows",
+  "version": "0.0.1",
+  "main": "window.js",
+  "ignore": [
+    "*.html",
+    "*.md",
+    "LICENSE",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "https://github.com/pielambr/WindowJS",
+  "authors": [
+    "Pieterjan <me@pielambr.be>"
+  ],
+  "license": "MIT"
 }
