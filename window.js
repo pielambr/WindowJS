@@ -5,69 +5,82 @@
 function WindowJS (options) {
     var that = this;
     if(options) {
+        // Get a reference to body DOM element
         this.body = document.getElementsByTagName("body")[0];
+        // Create outer window div
         this._window = document.createElement("div");
         this._window.className = "windowjs-window";
         this._window.style.position = "absolute";
+        // Add title div
         if("title" in options) {
             this._title = document.createElement("div");
             this._title.className = "windowjs-title";
-            this.title = document.createTextNode(options.title);
-            this._title.appendChild(this.title);
-            this._window.appendChild(this._title);
+            this._title.innerHTML = options.title;
+            this.addToWindow(this._title);
         }
-        if("closeable" in options) {
+        // Add a close button and make closeable
+        if("close_button" in options) {
             this._close = document.createElement("div");
             this._close.className = "windowjs-close";
-            this.closeable = options.closeable;
-            if("close_button" in options) {
-                this._close.innerHTML = options.close_button;
-            } else {
-                this.close_button = document.createElement("span");
-                this.close_button.appendChild(document.createTextNode("x"));
-                this._close.appendChild(this.close_button);
-            }
+            this._close.innerHTML = options.close_button;
             this._close.onclick = function() {
                 that.close();
             }
-            this._window.appendChild(this._close);
+            this.addToWindow(this._close);
         }
-        if("draggable" in options) {
+        // Make draggable if necessary
+        if("draggable" in options
+            && options.draggable === true) {
             this.draggable = options.draggable;
             this.attachDrag();
         }
+        // Attach an id to the window
         if("id" in options) {
             this._id = options.id;
         } else {
-            this._id = "windowjs-" + (document.getElementsByClassName("windowjs-window").length + 1);
+            this._id = "windowjs-" +
+                (document.getElementsByClassName("windowjs-window").length + 1);
         }
         this._window.id = this._id;
+        // Add some main content to the window
         if("content" in options){
             this._body = document.createElement("div");
             this._body.className = "windowjs-body";
             this._body.innerHTML = options.content;
-            this._window.appendChild(this._body);
+            this.addToWindow(this._body);
         }
+        // Add a parent div for our window
         if("parent" in options) {
             this.parent = options.parent;
+        } else {
+            this.parent = this.body;
         }
     } else {
-        console.error("No options provided, skipping creation of window");
+        // We need options to do something
+        throw "No options provided, skipping creation of window";
     }
 }
 
+// Add a DOM element to our window
+WindowJS.prototype.addToWindow = function(el) {
+    this._window.appendChild(el);
+}
+
+// Remove the window from the DOM
 WindowJS.prototype.close = function() {
     this._window.parentNode.removeChild(this._window);
 }
 
+// Add the window to the DOM
 WindowJS.prototype.show = function() {
     if(this.parent) {
         this.parent.appendChild(this._window);
     } else {
-        this.body.appendChild(this._window);
+        throw "WindowJS instance has no valid parent div";
     }
 }
 
+// Add drag functionality, attached to the title div
 WindowJS.prototype.attachDrag = function() {
     var that = this;
     this._window.ondragstart = function() {
