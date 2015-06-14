@@ -6,7 +6,7 @@ function WindowJS (options) {
     var that = this;
     if(options) {
         // Get a reference to body DOM element
-        this.body = document.getElementsByTagName("body")[0];
+        this._body = document.getElementsByTagName("body")[0];
         // Create outer window div
         this._window = this._createElement("article", "windowjs-window");
         this._window.style.position = "absolute";
@@ -29,7 +29,7 @@ function WindowJS (options) {
         }
         // Make draggable if necessary
         if("draggable" in options && options.draggable === true) {
-            this.draggable = options.draggable;
+            this._draggable = options.draggable;
             this._attachDrag();
         }
         // Attach an id to the window
@@ -41,14 +41,18 @@ function WindowJS (options) {
         this._window.id = this._id;
         // Add some main content to the window
         if("content" in options){
-            this._body = this._createElement("main", "windowjs-body", options.content);
-            this._addToWindow(this._body);
+            this._content = this._createElement("main", "windowjs-body", options.content);
+            this._addToWindow(this._content);
+        }
+        if("remember" in options) {
+            this._remember = options.remember;
+            this._restoreLocation();
         }
         // Add a parent div for our window
         if("parent" in options) {
-            this.parent = options.parent;
+            this._parent = options.parent;
         } else {
-            this.parent = this.body;
+            this._parent = this.body;
         }
     } else {
         // We need options to do something
@@ -83,8 +87,8 @@ WindowJS.prototype.close = function() {
 
 // Add the window to the DOM
 WindowJS.prototype.show = function() {
-    if(this.parent) {
-        this.parent.appendChild(this._window);
+    if(this._parent) {
+        this._parent.appendChild(this._window);
     } else {
         throw "WindowJS instance has no valid parent div";
     }
@@ -109,17 +113,21 @@ WindowJS.prototype._attachDrag = function() {
 };
 
 WindowJS.prototype._setPosition = function(position) {
-    if("left" in position){
-        this._window.style.left = position.left;
+    for(var p in position) {
+        this._window.style[p] = position[p];
     }
-    if("top" in position) {
-        this._window.style.top = position.top;
+};
+
+WindowJS.prototype._saveLocation = function() {
+    if(this._remember) {
+        localStorage.setItem("windowjs_" + this._id, JSON.stringify(this._getPosition()));
     }
-    if("bottom" in position) {
-        this._window.style.bottom = position.bottom;
-    }
-    if("right" in position) {
-        this._window.style.right = position.right;
+};
+
+WindowJS.prototype._restoreLocation = function() {
+    if(this._remember) {
+        var pos = JSON.parse(localStorage.getItem("windowjs_" + this._id));
+        this._setPosition(pos);
     }
 };
 
