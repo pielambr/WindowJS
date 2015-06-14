@@ -38,8 +38,7 @@ function WindowJS (options) {
         if("id" in options) {
             this._id = options.id;
         } else {
-            this._id = "windowjs-" +
-                (document.getElementsByClassName("windowjs-window").length + 1);
+            this._id = "windowjs-" + (document.getElementsByClassName("windowjs-window").length + 1);
         }
         this._window.id = this._id;
         // Add some main content to the window
@@ -64,12 +63,12 @@ function WindowJS (options) {
 // Add a DOM element to our window
 WindowJS.prototype.addToWindow = function(el) {
     this._window.appendChild(el);
-}
+};
 
 // Remove the window from the DOM
 WindowJS.prototype.close = function() {
     this._window.parentNode.removeChild(this._window);
-}
+};
 
 // Add the window to the DOM
 WindowJS.prototype.show = function() {
@@ -78,14 +77,14 @@ WindowJS.prototype.show = function() {
     } else {
         throw "WindowJS instance has no valid parent div";
     }
-}
+};
 
 // Add drag functionality, attached to the title div
 WindowJS.prototype.attachDrag = function() {
     var that = this;
     this._window.ondragstart = function() {
         return false;
-    }
+    };
     this._title.onmousedown = function() {
         document.onmousemove = function(ev) {
             var pos = that._title.getBoundingClientRect();
@@ -94,8 +93,8 @@ WindowJS.prototype.attachDrag = function() {
             that._window.style.left = x;
             that._window.style.top = y;
         }
-    }
+    };
     this._title.onmouseup = function() {
         document.onmousemove = null;
-    }
-}
+    };
+};
