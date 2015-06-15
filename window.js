@@ -27,11 +27,6 @@ function WindowJS (options) {
             };
             this._addToHeader(this._close);
         }
-        // Make draggable if necessary
-        if("draggable" in options && options.draggable === true) {
-            this._draggable = options.draggable;
-            this._attachDrag();
-        }
         // Attach an id to the window
         if("id" in options) {
             this._id = options.id;
@@ -39,20 +34,26 @@ function WindowJS (options) {
             this._id = "windowjs-" + (document.getElementsByClassName("windowjs-window").length + 1);
         }
         this._window.id = this._id;
+        // Make draggable if necessary
+        if("draggable" in options && options.draggable === true) {
+            this._draggable = options.draggable;
+            this._attachDrag();
+        }
         // Add some main content to the window
         if("content" in options){
             this._content = this._createElement("main", "windowjs-body", options.content);
             this._addToWindow(this._content);
         }
-        if("remember" in options) {
-            this._remember = options.remember;
-            this._restoreLocation();
-        }
         // Add a parent div for our window
         if("parent" in options) {
             this._parent = options.parent;
         } else {
-            this._parent = this.body;
+            this._parent = this._body;
+        }
+        // Save/restore the window location
+        if("remember" in options) {
+            this._remember = options.remember;
+            this._restoreLocation();
         }
     } else {
         // We need options to do something
@@ -104,9 +105,9 @@ WindowJS.prototype._attachDrag = function() {
     };
     this._title.onmousedown = function() {
         document.onmousemove = function(ev) {
-            var x = (ev.clientX - that._title.clientHeight/2)+"px";
-            var y = (ev.clientY - that._title.clientWidth/2)+"px";
-            that._setPosition({top: x, left: y});
+            var x = (ev.clientX - that._title.clientHeight/2);
+            var y = (ev.clientY - that._title.clientWidth/2);
+            that._setPosition({top: y, left: x});
         };
     };
     this._title.onmouseup = function() {
@@ -117,8 +118,9 @@ WindowJS.prototype._attachDrag = function() {
 // Set absolute position of window on screen
 WindowJS.prototype._setPosition = function(position) {
     for(var p in position) {
-        this._window.style[p] = position[p];
+        this._window.style[p] = position[p]+"px";
     }
+    this._saveLocation();
 };
 
 // Save the location of the window currently
@@ -132,7 +134,7 @@ WindowJS.prototype._saveLocation = function() {
 WindowJS.prototype._restoreLocation = function() {
     if(this._remember) {
         var pos = JSON.parse(localStorage.getItem("windowjs_" + this._id));
-        this._setPosition(pos);
+        this._setPosition({top: pos.top, left: pos.left});
     }
 };
 
