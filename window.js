@@ -60,6 +60,7 @@ function WindowJS (options) {
     }
 }
 
+// Create a DOM element and return it
 WindowJS.prototype._createElement = function(tag, className, html) {
     var el = document.createElement(tag);
     if(className) {
@@ -76,6 +77,7 @@ WindowJS.prototype._addToWindow = function(el) {
     this._window.appendChild(el);
 };
 
+// Add a DOM element to window header
 WindowJS.prototype._addToHeader = function(el) {
     this._header.appendChild(el);
 };
@@ -112,18 +114,21 @@ WindowJS.prototype._attachDrag = function() {
     };
 };
 
+// Set absolute position of window on screen
 WindowJS.prototype._setPosition = function(position) {
     for(var p in position) {
         this._window.style[p] = position[p];
     }
 };
 
+// Save the location of the window currently
 WindowJS.prototype._saveLocation = function() {
     if(this._remember) {
         localStorage.setItem("windowjs_" + this._id, JSON.stringify(this._getPosition()));
     }
 };
 
+// Restore the location of the current window
 WindowJS.prototype._restoreLocation = function() {
     if(this._remember) {
         var pos = JSON.parse(localStorage.getItem("windowjs_" + this._id));
@@ -141,6 +146,7 @@ WindowJS.prototype._getWidth = function() {
     return this._window.scrollWidth;
 };
 
+// Get current absolute position in viewport
 WindowJS.prototype._getPosition = function() {
     var pos = this._window.getBoundingClientRect();
     return {
@@ -151,24 +157,28 @@ WindowJS.prototype._getPosition = function() {
     };
 };
 
+// Place this window below the 'other' window
 WindowJS.prototype.below = function(other, spacing) {
     var top = other._getPosition().bottom + spacing;
     var left = other._getPosition().left;
     this._setPosition({top: top, left: left});
 };
 
+// Place this window above the 'other' window
 WindowJS.prototype.above = function(other, spacing) {
     var bottom = other._getPosition().top + spacing;
     var left = other._getPosition().left;
     this._setPosition({bottom: bottom, left: left});
 };
 
+// Place this window left of the 'other' window
 WindowJS.prototype.leftOf = function(other, spacing) {
     var right = other._getPosition().left + spacing;
     var top = other._getPosition().top;
     this._setPosition({top: top, right: right});
 };
 
+// Place this window right of the 'other' window
 WindowJS.prototype.rightOf = function(other, spacing) {
     var left = other._getPosition().right + spacing;
     var top = other._getPosition().top;
